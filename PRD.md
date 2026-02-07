@@ -1,25 +1,25 @@
-Product Requirements Document: PartnerTools CRM
+# Product Requirements Document: PartnerTools CRM
 
-1. Executive Summary
+## 1. Executive Summary
 
 PartnerTools CRM is a high-performance, cost-efficient Customer Relationship Management platform. It aims to replace expensive Salesforce per-user licensing with a JAMstack architecture powered by a Rust API.
 
 By leveraging the Salesforce -like SuiteCRM SQL table structure aligned with the Microsoft Common Data Model (CDM), the system ensures data interoperability across agencies while reducing infrastructure costs. The platform focuses on speed, type safety, and "write-once, deploy-everywhere" web standards.
 
-2. Problem Statement
+## 2. Problem Statement
 
 High Costs: Licensing fees for Salesforce and Dynamics are a significant recurring drain.
 Data Silos: Without a shared data language, integrating data from materials, manufacturing, and sales (or agency equivalents) requires custom, expensive implementations.
 
 Performance: Legacy CRM architectures (monolithic PHP/Java) often suffer from slow load times and security vulnerabilities compared to modern static-first approaches.
 
-3. Goals & Success Metrics
+## 3. Goals & Success Metrics
 
 Cost Reduction: Reduce CRM operating costs by eliminating per-user fees.
 Performance: API response times under 50ms using Rust.
 Interoperability: Achieve schema compliance with the Common Data Model (CDM) for core entities (accounts, contacts).
 
-4. Technical Architecture
+## 4. Technical Architecture
 
 4.1. The Stack (JAMstack)
 
@@ -39,7 +39,7 @@ ORM Strategy: SeaORM is recommended over Diesel or SQLx.Rationale: SeaORM is asy
 
 Security: Rust’s memory safety ensures robust handling of sensitive government data.
 
-5. Data Model & Database Schema
+## 5. Data Model & Database Schema
 
 The database must be similar to the Salesforce-like SuiteCRM naming conventions while mapping conceptually to the Microsoft Common Data Model (CDM) to ensure standard shapes for "accounts" etc.
 
@@ -68,21 +68,18 @@ To support government-specific data without altering core schemas, custom fields
 Example: If an agency needs an "Age" field for a contact, it is stored in contacts\_cstm.age\_c.
 Rust Implementation: The API must automatically perform LEFT JOIN on \_cstm tables when fetching detail views.
 
-6. Feature Requirements
+## 6. Feature Requirements
 
 6.1. CRM Core
 Entity Management: CRUD operations for Accounts, Contacts, Leads, and Opportunities.
 Logic Hooks: Rust-based implementation of "Logic Hooks" to trigger actions (e.g., email notifications) on save/update, replacing PHP logic hooks.
 Search: ElasticSearch integration for high-speed retrieval of UUID-based records.
-6.2. Outlook Replacement (Web Add-in)
-To replace the unstable COM add-ins, PartnerTools CRM will implement a Outlook Web Add-in.
-Architecture: A side-pane web app running in the Outlook sandbox.
-Features:Contextual View: Automatically pulls the CRM Contact record based on the sender\'s email address using the Rust API.
+6.2. Contextual View: Automatically pulls the CRM Contact record based on the sender\'s email address using the Rust API.
 
 One-Click Archiving: Button to save email content to the emails table in the CRM.
 Manifest Type: Configure strictly as a Web Add-in to prevent installation of legacy COM counterparts.
 
-7. Migration & Integration Strategy
+## 7. Migration & Integration Strategy
 
 7.1. Data Migration
 ETL Process: Extract data from Salesforce/Dynamics, transform IDs to UUIDs, and load into the Postgres accounts and contacts tables.
@@ -91,7 +88,7 @@ Schema Extension: Use the CDM's extensibility to map specific government vertica
 7.2. Interoperability
 CDM Compliance: By adhering to the CDM metadata system, PartnerTools CRM data can be consumed by Microsoft PowerBI and Azure Data Lake without complex transformation.
 
-8. Security & Compliance
+## 8. Security & Compliance
 
 Authentication: Better-auth OAuth2 implementation.
 
@@ -99,12 +96,10 @@ Authorization: Role-based access control (RBAC) mirroring SuiteCRM's "Security G
 
 Audit Logging: All relationship changes (e.g., removing a contact from an account) must be logged, as the DB does not enforce cascading deletes.
 
-9. Roadmap
+## 9. Roadmap
 
 Phase 1 (Core): Rust API development; implementation of accounts and contacts schemas; UUID generation logic.
 
 Phase 2 (Frontend): JAMstack UI deployment; basic CRUD features.
 
-Phase 3 (Outlook): Development of the Web Add-in to deprecate COM plugins.
-
-Phase 4 (Analytics): Integration of FinOps dashboards for real-time financial transparency.
+Phase 3 (Analytics): Integration of FinOps dashboards for real-time financial transparency.
